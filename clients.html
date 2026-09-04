@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="agency-os.css">
+  <title>Agency OS – Clients</title>
+</head>
+<body data-route="clients">
+  <div id="shell">
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <div>
+        <div class="brand-name">Agency OS</div>
+        <div class="brand-sub">Client operations</div>
+      </div>
+    </div>
+    <nav class="nav-group">
+      <a class="nav-item" href="dashboard.html"><span>Dashboard</span></a>
+      <a class="nav-item active" href="clients.html"><span>Clients</span><span class="nav-count" id="nav-count-clients">0</span></a>
+      <a class="nav-item" href="projects.html"><span>Projects</span><span class="nav-count" id="nav-count-projects">0</span></a>
+      <a class="nav-item" href="proposals.html"><span>Proposals</span></a>
+      <a class="nav-item" href="invoices.html"><span>Invoices</span></a>
+      <a class="nav-item" href="templates.html"><span>Email templates</span></a>
+    </nav>
+    <div id="sidebar-foot">
+      <div style="margin-bottom:8px;">One client, one profile, everything connected.</div>
+      <button type="button" class="btn btn-sm" style="width:100%;" onclick="logoutUser(); location.href='index.html';">Log out</button>
+    </div>
+  </aside>
+    <main id="main">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">Clients</h1>
+          <div class="page-sub">Find a client, open their profile, see the whole picture.</div>
+        </div>
+        <button class="btn btn-primary" onclick="openClientForm()">+ Add client</button>
+      </div>
+      <div class="search-wrap" style="margin-bottom:18px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="client-search" placeholder="Search by name, business, email, phone or project" oninput="VIEW.search=this.value; renderMain();">
+      </div>
+      <div id="content">
+        <div class="empty"><div class="empty-title">Loading…</div></div>
+      </div>
+    </main>
+  </div>
+  <div id="modal-root"></div>
+  <div id="toast"></div>
+  <script src="auth.js"></script>
+  <script src="agency-os.js"></script>
+</body>
+</html>
