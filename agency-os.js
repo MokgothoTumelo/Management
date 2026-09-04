@@ -11,6 +11,7 @@ let VIEW = {
   search: ''
 };
 let LOADED = false;
+
 /* Map routes to HTML page filenames */
 const ROUTE_PAGES = {
   dashboard: 'index.html',
@@ -21,6 +22,7 @@ const ROUTE_PAGES = {
   invoices: 'invoices.html',
   templates: 'templates.html'
 };
+
 /** Read initial route + clientId/tab from the current page & URL */
 function readRouteFromPage() {
   const bodyRoute = document.body && document.body.dataset.route;
@@ -80,12 +82,12 @@ async function loadState() {
   // Clients
   try {
     const raw = storageGet('clients');
-    STATE.clients = raw ? JSON.parse(raw) : seedClients();
+    STATE.clients = raw ? JSON.parse(raw) : [];   // <-- NOW STARTS WITH EMPTY ARRAY
   } catch (e) {
-    STATE.clients = seedClients();
+    STATE.clients = [];                           // <-- FALLBACK TO EMPTY
   }
 
-  // Templates
+  // Templates (these stay as helpful examples)
   try {
     const raw = storageGet('templates');
     STATE.templates = raw ? JSON.parse(raw) : seedTemplates();
@@ -94,7 +96,7 @@ async function loadState() {
   }
 
   // Persist seed data the first time so later reloads keep edits
-  if (!storageHas('clients')) saveClients();
+  if (!storageHas('clients')) saveClients();       // saves an empty array
   if (!storageHas('templates')) saveTemplates();
 
   LOADED = true;
@@ -119,47 +121,21 @@ function persistAndRender() {
   render();
 }
 
-function seedTemplates(){
+// ------------------------------------------------
+//   SEED FUNCTIONS
+// ------------------------------------------------
+
+function seedTemplates() {
   return [
     {id:uid(), name:'Kickoff welcome', subject:'Welcome aboard, {{client_name}}', body:'Hi {{client_name}},\n\nThanks for choosing us for {{project_name}}. We are excited to get started.\n\nNext, we will send over an information request so we can begin design.\n\nBest,\nThe Team'},
     {id:uid(), name:'Content reminder', subject:'Quick reminder — {{project_name}}', body:'Hi {{client_name}},\n\nJust a friendly nudge that we are still waiting on a few items for {{project_name}}. Let us know if you need a hand.\n\nBest,\nThe Team'},
     {id:uid(), name:'Invoice sent', subject:'Invoice for {{project_name}}', body:'Hi {{client_name}},\n\nPlease find attached the invoice for {{project_name}}. Let us know if you have any questions.\n\nBest,\nThe Team'}
   ];
 }
-function seedClients(){
-  const c1 = uid(), p1 = uid(), p2 = uid();
-  return [
-    {
-      id:c1, name:'Naledi Khumalo', business:'Khumalo & Sons Attorneys', email:'naledi@khumalolaw.co.za', phone:'+27 82 555 0142',
-      status:'Active', assignedTo:'Thabo', createdAt:todayISO(),
-      projects:[
-        {id:p1, name:'Firm website redesign', type:'Website Dev', status:'Development', progress:60, startDate:'2026-06-01', dueDate:'2026-09-15', description:'Full rebuild of the marketing site on a new CMS.'},
-        {id:p2, name:'Monthly maintenance', type:'Maintenance', status:'Onboarding', progress:15, startDate:'2026-08-01', dueDate:'', description:'Ongoing updates, backups and monitoring.'}
-      ],
-      tasks:[
-        {id:uid(), title:'Review homepage wireframes', projectId:p1, assignee:'Thabo', dueDate:'2026-09-02', priority:'High', done:false},
-        {id:uid(), title:'Set up staging server', projectId:p1, assignee:'Sam', dueDate:'2026-08-20', priority:'Medium', done:true}
-      ],
-      notes:[{id:uid(), text:'Prefers WhatsApp for quick questions, email for anything formal.', author:'Thabo', date:todayISO()}],
-      timeline:[{id:uid(), type:'client', text:'Client profile created', date:'2026-06-01'}],
-      emails:[], infoRequests:[
-        {id:uid(), item:'Firm logo (vector)', status:'Received', requestedDate:'2026-06-05', notes:''},
-        {id:uid(), item:'Team bios and headshots', status:'Requested', requestedDate:'2026-08-15', notes:'Need square photos, min 800px'}
-      ],
-      followUps:[{id:uid(), note:'Check in on homepage feedback', date:'2026-09-03', done:false}],
-      proposals:[{id:uid(), title:'Website redesign proposal', services:[{name:'Discovery and UX',price:8500},{name:'Design',price:12000},{name:'Development',price:24000}], vatPercent:15, status:'Accepted', date:'2026-05-20', notes:'50% deposit, 50% on launch.'}],
-      invoices:[{id:uid(), title:'Deposit — website redesign', items:[{name:'Deposit (50%)',price:22250}], vatPercent:0, status:'Paid', date:'2026-06-02', dueDate:'2026-06-16', proposalId:null}]
-    },
-    {
-      id:uid(), name:'Marcus Chen', business:'Chen Coffee Roasters', email:'marcus@chencoffee.com', phone:'+27 71 555 0198',
-      status:'Waiting on Client', assignedTo:'Sam', createdAt:'2026-07-10',
-      projects:[{id:uid(), name:'E-commerce store', type:'Website Dev', status:'Design', progress:35, startDate:'2026-07-10', dueDate:'2026-10-01', description:'Online store with subscription coffee plans.'}],
-      tasks:[{id:uid(), title:'Send moodboard for approval', projectId:null, assignee:'Sam', dueDate:'2026-09-01', priority:'Medium', done:false}],
-      notes:[], timeline:[{id:uid(), type:'client', text:'Client profile created', date:'2026-07-10'}],
-      emails:[], infoRequests:[{id:uid(), item:'Product photography', status:'Requested', requestedDate:'2026-08-10', notes:'Overdue by two weeks'}],
-      followUps:[], proposals:[], invoices:[]
-    }
-  ];
+
+// NO HARD‑CODED CLIENTS ANYMORE – STARTS EMPTY
+function seedClients() {
+  return [];   // <-- THIS IS THE CHANGE
 }
 
 /* ============================= TOAST ============================= */
